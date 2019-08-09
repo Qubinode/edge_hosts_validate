@@ -1,0 +1,7 @@
+- name: Validate system is registered to Red Hat
+  shell: >
+    subscription-manager status| grep ^Overall
+  register: subscription_status
+  become: True
+  ignore_errors: yes
+  failed_when: "'Current' not in command_result.stdout"

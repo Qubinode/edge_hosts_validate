@@ -1,0 +1,17 @@
+
+
+- name: Validate {{ lvm_dir }} is mounted
+  shell: >
+    df -h | grep /var/lib/libvirt/images 
+  register: fs_mount_status
+  become: True
+  ignore_errors: yes
+  failed_when: fs_mount_status == ""
+
+- name: Validate {{ lvm_dir }} is permanently mounted
+  shell: >
+    grep /var/lib/libvirt/images /etc/fstab 
+  register: fs_status
+  become: True
+  ignore_errors: yes
+  failed_when: fs_status == ""

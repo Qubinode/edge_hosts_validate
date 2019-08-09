@@ -1,0 +1,12 @@
+- name: Gather the rpm package facts
+  package_facts:
+    manager: auto
+  become: True
+
+- name: Validate {{ item }} is installed
+  fail:
+    msg: "{{ item }} is not installed"
+  when: "{{ item }} not in ansible_facts.packages"
+  loop: "{{ package_list }}"
+  ignore_errors: yes
+  become: True   
