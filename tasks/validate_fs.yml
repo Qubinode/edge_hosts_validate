@@ -1,15 +1,15 @@
-- name: Validate {{ lvm_dir }} exists
+- name: Validate {{ libvirt_install_dir }} exists
   stat:
-    path: "{{ lvm_dir }}"
+    path: "{{ libvirt_install_dir }}"
   register: lvm_path
   become: True 
   ignore_errors: yes
-  failed_when: not lvm_path.stat.isdir and lvm_path.stat.isdir is not defined
+  failed_when: lvm_path.stat.isdir == false and lvm_path.stat.exists == false
   tags:
     - validate
     - validate_fs
 
-- name: Validate {{ lvm_dir }} is mounted
+- name: Validate {{ libvirt_install_dir }} is mounted
   lineinfile: 
     dest: '/etc/fstab'
     regexp: '(^.*libvirt.*$)'

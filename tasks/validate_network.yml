@@ -1,0 +1,24 @@
+- name: Validate host ifcfg-{{ item.bridge }} file exists 
+  stat:
+    path: "/etc/sysconfig/network/scripts/ifcfg-{{ item.bridge }}"
+  with_items: "{{ libvirt_host_networks }}"
+  register: br_path
+  become: True 
+  ignore_errors: yes
+  failed_when: not br_path.stat.isdir and br_path.stat.isdir is not defined
+  tags:
+    - validate
+    - validate_network
+
+- name: Validate reachibility through using {{ item.bridge }} to 8.8.8.8
+  shell: >
+     ping -c 1 -I {{ item.bridge }} 8.8.8.8
+  with_items: "{{ libvirt_host_networks }}"
+  register: ping_result
+  become: True 
+  ignore_errors: yes
+  failed_when: "'Unreachable' in ping_result.stdout"
+  tags:
+    - validate
+    - validate_network
+    
