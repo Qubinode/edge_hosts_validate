@@ -12,8 +12,8 @@
 - name: Validate {{ lvm_dir }} is mounted
   lineinfile: 
     dest: '/etc/fstab'
-    line: "{{ lvm_dir }}"
     regexp: '(^.*libvirt.*$)'
+    state: present
     check_mode: yes
   register: libvirt_path
   become: True 
