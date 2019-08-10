@@ -2,6 +2,9 @@
   package_facts:
     manager: auto
   become: True
+  tags:
+    - validate
+    - validate_pkgs
 
 - name: Validate {{ item }} is installed
   fail:
@@ -10,3 +13,6 @@
   loop: "{{ package_list }}"
   ignore_errors: yes
   become: True   
+  tags:
+    - validate
+    - validate_pkgs
