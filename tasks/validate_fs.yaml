@@ -4,7 +4,7 @@
   register: lvm_path
   become: True 
   ignore_errors: yes
-  failed_when:  not lvm_path.stat.isdir and lvm_path.stat.isdir is not defined
+  failed_when: not lvm_path.stat.isdir and lvm_path.stat.isdir is not defined
   tags:
     - validate
     - validate_fs
@@ -12,7 +12,7 @@
 - name: Validate {{ lvm_dir }} is mounted
   lineinfile: 
     dest: '/etc/fstab'
-    line: "user"
+    line: "{{ lvm_dir }}"
     regexp: '(^.*libvirt.*$)'
     check_mode: yes
   register: libvirt_path
