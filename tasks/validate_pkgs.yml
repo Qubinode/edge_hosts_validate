@@ -1,11 +1,11 @@
 - name: Validate {{ item }} is installed
-  shell: >
+  command: >
     "rpm -qa | grep {{ item }}"
   with_items: "{{ libvirt_pkgs }}"
   register: installed_rpms
   become: True
   ignore_errors: yes
-  failed_when: not installed_rpms.stdout 
+  failed_when: installed_rpms.stdout == ""
   tags:
     - validate
     - validate_pkgs
