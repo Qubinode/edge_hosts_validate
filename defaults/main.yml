@@ -1,4 +1,4 @@
 ---
 libvirt_install_dir: '/var/lib/libvirt/images'
 libvirt_host_networks: []
-package_list: []
+libvirt_pkgs: []
