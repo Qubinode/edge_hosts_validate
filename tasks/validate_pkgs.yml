@@ -1,18 +1,11 @@
-- name: Gather the rpm package facts
-  package_facts:
-    manager: auto
-  become: True
-  tags:
-    - validate
-    - validate_pkgs
-
 - name: Validate {{ item }} is installed
-  fail:
-    msg: "{{ item }} is not installed"
-  when: "{{ item }} not in ansible_facts.packages"
-  loop: "{{ package_list }}"
+  shell: >
+    "rpm -qa | grep {{ item }}"
+  with_items: "{{ libvirt_pkgs }}"
+  register: installed_rpms
+  become: True
   ignore_errors: yes
-  become: True   
+  failed_when: not installed_rpms.stdout 
   tags:
     - validate
     - validate_pkgs
