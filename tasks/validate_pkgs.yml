@@ -5,7 +5,7 @@
   register: installed_pkg
   become: True
   ignore_errors: yes
-  failed_when: not installed_pkgs
+  failed_when: not installed_pkg
   tags:
     - validate
     - validate_pkgs
