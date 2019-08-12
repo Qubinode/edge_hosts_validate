@@ -4,7 +4,7 @@
   register: subscription_status
   become: True
   ignore_errors: yes
-  failed_when: "'Current' not in command_result.stdout"
+  failed_when: "'Current' not in subscription_status.stdout"
   tags:
     - validate
     - validate_rhsm
