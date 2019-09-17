@@ -5,6 +5,7 @@
   become: True
   ignore_errors: yes
   failed_when: "'Current' not in subscription_status.stdout"
+  changed_when: false
   tags:
     - validate
     - validate_rhsm
