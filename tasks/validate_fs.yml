@@ -25,7 +25,7 @@
 
 - name: "Validate file exists under the {{ project_dir }}"
   stat:
-    path: "{{ project_dir }}/rhel-server-7.6-x86_64-kvm.qcow2"
+    path: "{{ project_dir }}/{{ os_qcow_image_name }}"
   with_items: "{{ libvirt_host_networks }}"
   register: result_dir
   become: True 
