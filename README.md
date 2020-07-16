@@ -1,3 +1,5 @@
+![Ansible Lint](https://github.com/Qubinode/edge_hosts_validate/workflows/Ansible%20Lint/badge.svg?branch=dev)
+
 KVM HOST Validator
 =========
 
