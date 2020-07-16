@@ -1,7 +1,7 @@
-Role Name
+KVM HOST Validator
 =========
 
-A brief description of the role goes here.
+Validate KVM host before deployment.
 
 Requirements
 ------------

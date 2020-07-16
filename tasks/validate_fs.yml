@@ -2,21 +2,21 @@
   stat:
     path: "{{ libvirt_install_dir }}"
   register: lvm_path
-  become: True 
+  become: True
   ignore_errors: yes
-  failed_when: lvm_path.stat.isdir == false and lvm_path.stat.exists == false
+  failed_when: not lvm_path.stat.isdir|bool and not lvm_path.stat.exists|bool
   tags:
     - validate
     - validate_fs
 
 - name: Validate {{ libvirt_install_dir }} is mounted
-  lineinfile: 
+  lineinfile:
     dest: '/etc/fstab'
     regexp: '(^.*libvirt.*$)'
     state: present
     check_mode: yes
   register: libvirt_path
-  become: True 
+  become: True
   ignore_errors: yes
   failed_when: libvirt_path.changed
   tags:
@@ -28,7 +28,7 @@
     path: "{{ project_dir }}/{{ os_qcow_image_name }}"
   with_items: "{{ libvirt_host_networks }}"
   register: result_dir
-  become: True 
+  become: True
   ignore_errors: yes
   failed_when: not result_dir.stat.exists
   tags:
