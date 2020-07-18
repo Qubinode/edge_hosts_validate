@@ -5,19 +5,25 @@
   register: br_path
   become: True
   ignore_errors: yes
-  failed_when: not br_path.stat.isdir and br_path.stat.isdir is not defined
   tags:
     - validate
     - validate_network
+
+- name: Fail when  ifcfg-{{ item.bridge }} does not exist
+  fail: msg="Bailing out.  ifcfg-{{ item.bridge }} does not exist"
+  when: not br_path.stat.isdir and br_path.stat.isdir is not defined
 
 - name: Validate reachibility through using {{ item.bridge }} to 8.8.8.8
   command:  "ping -c 1 -I {{ item.bridge }} 8.8.8.8"
   with_items: "{{ libvirt_host_networks }}"
   register: ping_result
-  changed_when:  "'Unreachable' in ping_result.stdout"
+  changed_when: true
   become: True
   ignore_errors: yes
   tags:
    - validate
    - validate_network
 
+- name: Fail when {{ item.bridge }} to 8.8.8.8 unreachable
+  fail: msg="Bailing out. {{ item.bridge }} to 8.8.8.8 unreachable"
+  when: "'Unreachable' in ping_result.stdout"

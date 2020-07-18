@@ -4,8 +4,11 @@
   register: subscription_status
   become: True
   ignore_errors: yes
-  failed_when: "'Current' not in subscription_status.stdout"
   changed_when: false
   tags:
     - validate
     - validate_rhsm
+
+- name: Fail when Subscription status is not current
+  fail: msg="Bailing out.  Subscription status is not current"
+  when: "'Current' not in subscription_status.stdout"
