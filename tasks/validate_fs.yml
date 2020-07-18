@@ -4,10 +4,14 @@
   register: lvm_path
   become: True
   ignore_errors: yes
-  failed_when: not lvm_path.stat.isdir|bool and not lvm_path.stat.exists|bool
   tags:
     - validate
     - validate_fs
+
+- name: Fail when  {{ libvirt_install_dir }} does not  exist
+  fail: msg="Bailing out. {{ libvirt_install_dir }} does not  exist."
+  when:  not lvm_path.stat.isdir|bool and not lvm_path.stat.exists|bool
+
 
 - name: Validate {{ libvirt_install_dir }} is mounted
   lineinfile:
@@ -23,14 +27,24 @@
     - validate
     - validate_fs
 
-- name: "Validate file exists under the {{ project_dir }}"
+- name: "Confirm that  {{ qcow_rhel_name }} exists under the {{ project_dir }}"
   stat:
     path: "{{ project_dir }}/{{ os_qcow_image_name }}"
-  with_items: "{{ libvirt_host_networks }}"
-  register: result_dir
+  register: main_qcow_check
   become: True
   ignore_errors: yes
-  failed_when: not result_dir.stat.exists
-  tags:
-    - validate
-    - validate_fs
+
+- name: Fail when {{ project_dir }}/{{ os_qcow_image_name }} does not exist
+  fail: msg="Bailing out. {{ project_dir }}/{{ os_qcow_image_name }} does not exist"
+  when: not main_qcow_check.stat.exists or main_qcow_check is undefined
+
+- name: "Confirm that  {{ qcow_rhel_name }} exists under the {{ project_dir }}"
+  stat:
+    path: "{{ kvm_host_libvirt_dir }}/{{ os_qcow_image_name }}"
+  register: kvm_qcow_check
+  become: True
+  ignore_errors: yes
+
+- name: Fail when {{ kvm_host_libvirt_dir }}/{{ os_qcow_image_name }} does not exist
+  fail: msg="Bailing out. {{ kvm_host_libvirt_dir }}/{{ os_qcow_image_name }} does not exist"
+  when: not kvm_qcow_check.stat.exists or kvm_qcow_check is undefined
